@@ -202,7 +202,7 @@ flowchart TD
 
 ### 7. Conclusion
 - End-to-end system from data science workflow to live deployment.
-- Live website link: https://your-vercel-project-url.vercel.app
+- Live website link: https://impact-sense-nine.vercel.app/
 
 ## Project Document Content
 
