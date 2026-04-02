@@ -80,10 +80,12 @@
       max-width: 1200px;
       margin: 0 auto;
       padding: 24px;
+      min-height: calc(100vh - 64px);
       display: grid;
       grid-template-columns: minmax(320px, 0.95fr) minmax(420px, 1.25fr);
       gap: 18px;
-      align-items: start;
+      align-items: center;
+      align-content: center;
       position: relative;
       z-index: 2;
     }
@@ -93,6 +95,7 @@
       border: 1px solid var(--line);
       padding: 20px;
       box-shadow: 0 0 0 1px rgba(0, 255, 65, 0.08), 0 14px 40px rgba(0, 0, 0, 0.28);
+      height: 100%;
     }
 
     .panel-title {
@@ -203,7 +206,12 @@
     }
 
     @media (max-width: 900px) {
-      .grid { grid-template-columns:1fr; }
+      .grid {
+        grid-template-columns:1fr;
+        min-height: auto;
+        align-items: start;
+        align-content: start;
+      }
       .row3 { grid-template-columns:1fr; }
       .nav { gap: 10px; }
       .top { padding: 8px 14px; }
