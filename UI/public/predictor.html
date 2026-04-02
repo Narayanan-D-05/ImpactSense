@@ -131,9 +131,19 @@
           body: JSON.stringify(payload)
         });
 
-        const data = await res.json();
+        const contentType = res.headers.get('content-type') || '';
+        const isJson = contentType.includes('application/json');
+        const data = isJson ? await res.json() : null;
         if (!res.ok) {
-          throw new Error(data.error || 'Prediction failed');
+          if (data && data.error) {
+            throw new Error(data.error);
+          }
+          const fallback = await res.text();
+          throw new Error(`Prediction failed (${res.status}). ${fallback.slice(0, 120)}`);
+        }
+
+        if (!data) {
+          throw new Error('Prediction failed: API returned non-JSON response.');
         }
 
         renderResult(data);

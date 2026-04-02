@@ -20,15 +20,15 @@
   ],
   "routes": [
     {
-      "src": "/api/predict",
+      "src": "/api/predict/?",
       "dest": "UI/api/predict.py"
     },
     {
-      "src": "/api/tests",
+      "src": "/api/tests/?",
       "dest": "UI/api/tests.py"
     },
     {
-      "src": "/api/health",
+      "src": "/api/health/?",
       "dest": "UI/api/health.py"
     },
     {
