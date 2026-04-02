@@ -68,3 +68,91 @@ After deploy, app pages are:
 - `/`
 - `/login`
 - `/predictor`
+
+## PPT Slides Content
+
+Detailed version: [../PPT_Slides_Content.md](../PPT_Slides_Content.md)
+
+### 1. Problem Statement
+- Earthquake alerts are difficult to interpret quickly from raw seismic values.
+- Non-specialist users need direct risk-level outputs.
+
+### 2. Proposed Solution
+- Predict earthquake alert class from seismic parameters using trained ML models.
+- Serve predictions through a web UI with score, probabilities, and risk level.
+
+### 3. Tech Stack
+- Frontend: HTML, CSS, JavaScript in [public](public).
+- Backend Local: Flask app in [app.py](app.py).
+- Backend Deployment: Vercel serverless functions in [api](api).
+- Models: scikit-learn and XGBoost artifacts in [../saved_models](../saved_models).
+
+### 4. Work flow diagram
+```mermaid
+flowchart TD
+  A[Input Parameters] --> B[Sanitize and Clamp]
+  B --> C[Feature Engineering depth_mag_ratio]
+  C --> D[Load Model gb_custom.pkl]
+  D --> E[Predict Class and Probabilities]
+  E --> F[Compute Impact Score and Risk Level]
+  F --> G[Render Result in Predictor UI]
+```
+
+### 5. Feasibility viability
+- Feasible: implemented and running locally and on serverless routes.
+- Viable: low-cost static + serverless architecture.
+
+### 6. Impact and Benefits
+- Improves speed and clarity of earthquake impact interpretation.
+- Provides robust behavior via validation and edge-case tests.
+
+### 7. Conclusion (live website link should be there)
+- The UI and API architecture is production-ready for lightweight deployment.
+- Live website link: https://your-vercel-project-url.vercel.app
+
+## Project Document Content
+
+Detailed version: [../Project_Document.md](../Project_Document.md)
+
+### 1. The problem
+Raw earthquake inputs are technical and not directly actionable for quick response decisions.
+
+### 2. Project name
+ImpactSense: Earthquake Impact Prediction System
+
+### 3. Goal
+Deliver an end-to-end pipeline and deployable app for impact/risk prediction.
+
+### 4. Proposed solution: small description
+Use trained multiclass ML models to predict alert category and risk metrics from seismic parameters, exposed through local Flask and Vercel serverless APIs.
+
+### 5. Implementation (weekly tasks)
+
+#### 5.1 Week1
+- Problem setup and requirement analysis.
+
+#### 5.2 Week2
+- Data exploration and feature analysis.
+
+#### 5.3 Week3
+- Preprocessing and model-ready dataset generation.
+
+#### 5.4 Week4
+- Training, tuning, and model artifact saving.
+
+#### 5.5 Week5
+- Evaluation and explainability using saved models.
+
+#### 5.6 Week6
+- UI development for landing/login/predictor.
+
+#### 5.7 Week7
+- Edge-case tests and deployment hardening.
+
+### 6. Tech stack used ( front end and backend and models)
+- Frontend: HTML/CSS/JS.
+- Backend: Flask + Vercel Python serverless.
+- Models: Random Forest, Gradient Boosting, XGBoost.
+
+### 7. Conclusion
+The project demonstrates a complete and feasible earthquake prediction decision-support system from notebook experiments to deployable UI and API.
