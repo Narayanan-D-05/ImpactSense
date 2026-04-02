@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SeismoTerm-88 | Predictor</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Space Grotesk', sans-serif; background:#131313; color:#e5e2e1; }
+    .shake-min { animation:none; }
+    .shake-light { animation: quake .35s linear 2; }
+    .shake-medium { animation: quake .22s linear 5; }
+    .shake-heavy { animation: quake .14s linear 8; }
+    @keyframes quake { 0%{transform:translate(0,0)} 25%{transform:translate(1px,-1px)} 50%{transform:translate(-1px,1px)} 75%{transform:translate(1px,1px)} 100%{transform:translate(0,0)} }
+  </style>
+</head>
+<body>
+  <header class="h-16 px-6 border-b border-[#3b4b37] flex items-center justify-between bg-[#131313] sticky top-0">
+    <div class="text-[#00ff41] font-bold tracking-[0.2em] text-sm">SEISMIC_PREDICTOR_INTERFACE</div>
+    <div class="flex items-center gap-4 text-xs">
+      <span id="userTag" class="text-[#72ff70]"></span>
+      <a href="/" class="text-[#9fb39a]">DASHBOARD</a>
+      <button id="logoutBtn" class="text-[#9fb39a]">LOGOUT</button>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto p-6 md:p-10 grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <section class="lg:col-span-5 bg-[#1c1b1b] border border-[#3b4b37] p-8">
+      <p class="text-xs tracking-[0.2em] text-[#72ff70]">PARAMETER_INPUT_V02</p>
+      <form id="predictForm" class="space-y-5 mt-6">
+        <div>
+          <label class="block text-xs text-[#9fb39a] mb-1">MAGNITUDE</label>
+          <input name="magnitude" type="number" step="0.01" min="0" max="10" required class="w-full bg-[#111] border border-[#3b4b37] p-3 text-[#00ff41]" />
+        </div>
+        <div>
+          <label class="block text-xs text-[#9fb39a] mb-1">DEPTH</label>
+          <input name="depth" type="number" step="0.01" min="0" max="700" required class="w-full bg-[#111] border border-[#3b4b37] p-3 text-[#00ff41]" />
+        </div>
+        <div class="grid grid-cols-3 gap-3">
+          <div>
+            <label class="block text-xs text-[#9fb39a] mb-1">CDI</label>
+            <input name="cdi" type="number" step="0.01" min="0" max="12" required class="w-full bg-[#111] border border-[#3b4b37] p-3 text-[#00ff41]" />
+          </div>
+          <div>
+            <label class="block text-xs text-[#9fb39a] mb-1">MMI</label>
+            <input name="mmi" type="number" step="0.01" min="0" max="12" required class="w-full bg-[#111] border border-[#3b4b37] p-3 text-[#00ff41]" />
+          </div>
+          <div>
+            <label class="block text-xs text-[#9fb39a] mb-1">SIG</label>
+            <input name="sig" type="number" step="0.01" min="0" max="1200" required class="w-full bg-[#111] border border-[#3b4b37] p-3 text-[#00ff41]" />
+          </div>
+        </div>
+
+        <button type="submit" class="w-full bg-[#00ff41] text-black py-3 font-bold tracking-wider">RUN_PREDICTION_ENGINE</button>
+      </form>
+      <p id="errorText" class="hidden mt-4 text-[#ffb4ab] text-sm"></p>
+    </section>
+
+    <section id="resultBox" class="lg:col-span-7 bg-[#1c1b1b] border border-[#3b4b37]">
+      <div class="p-6 border-b border-[#3b4b37] flex justify-between">
+        <h3 class="font-bold tracking-wider">PREDICTION_RESULT</h3>
+        <span class="text-xs text-[#9fb39a]">ID: ST-88-LIVE</span>
+      </div>
+
+      <div id="resultEmpty" class="p-10 text-sm text-[#9fb39a]">NO_PREDICTION_YET. INPUT_PARAMETERS_AND_RUN_ENGINE.</div>
+
+      <div id="resultContent" class="hidden p-8 grid grid-cols-1 md:grid-cols-2 gap-10">
+        <div>
+          <p class="text-xs text-[#9fb39a]">TARGET CLASS</p>
+          <div id="targetBadge" class="inline-flex items-center gap-3 px-6 py-2 mt-2 border border-black">
+            <span>!</span><span id="targetText" class="font-black text-2xl tracking-tight"></span>
+          </div>
+
+          <div class="mt-8">
+            <p class="text-xs text-[#9fb39a]">IMPACT SCORE</p>
+            <p id="impactText" class="text-5xl font-black text-[#00ff41]"></p>
+          </div>
+
+          <div class="mt-6">
+            <p class="text-xs text-[#9fb39a]">RISK LEVEL</p>
+            <p id="riskText" class="text-3xl font-black text-[#72ff70]"></p>
+          </div>
+        </div>
+
+        <div>
+          <p class="text-xs text-[#9fb39a] mb-4">PROBABILITY MAP</p>
+          <div id="probList" class="space-y-5"></div>
+        </div>
+      </div>
+
+      <div id="digestWrap" class="hidden p-6 bg-[#0e0e0e] border-t border-[#3b4b37]">
+        <p class="text-xs text-[#9fb39a] mb-3">INPUT VECTOR DIGEST</p>
+        <div id="digestList" class="flex flex-wrap gap-2"></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const classColors = { green: '#2e8b57', yellow: '#f2c94c', orange: '#f2994a', red: '#d7263d' };
+    const shakeClasses = ['shake-min', 'shake-light', 'shake-medium', 'shake-heavy'];
+
+    const user = localStorage.getItem('impact_user');
+    if (!user) {
+      window.location.href = '/login';
+    } else {
+      document.getElementById('userTag').textContent = `OPERATOR: ${user.toUpperCase()}`;
+    }
+
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('impact_user');
+      window.location.href = '/';
+    });
+
+    document.getElementById('predictForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const errorEl = document.getElementById('errorText');
+      errorEl.classList.add('hidden');
+      errorEl.textContent = '';
+
+      const formData = new FormData(e.target);
+      const payload = Object.fromEntries(formData.entries());
+      Object.keys(payload).forEach((k) => payload[k] = Number(payload[k]));
+
+      try {
+        const res = await fetch('/api/predict', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.error || 'Prediction failed');
+        }
+
+        renderResult(data);
+      } catch (err) {
+        errorEl.textContent = err.message;
+        errorEl.classList.remove('hidden');
+      }
+    });
+
+    function renderResult(data) {
+      const box = document.getElementById('resultBox');
+      box.classList.remove(...shakeClasses);
+      box.classList.add(data.shake_class || 'shake-min');
+
+      document.getElementById('resultEmpty').classList.add('hidden');
+      document.getElementById('resultContent').classList.remove('hidden');
+      document.getElementById('digestWrap').classList.remove('hidden');
+
+      const target = data.predicted_class.toUpperCase();
+      const badge = document.getElementById('targetBadge');
+      document.getElementById('targetText').textContent = `${target}_ALERT`;
+      badge.style.background = data.target_color;
+      badge.style.color = '#111';
+
+      document.getElementById('impactText').textContent = `${data.impact_score} /100.0`;
+      document.getElementById('riskText').textContent = `${data.risk_level.toUpperCase()}_EVENT`;
+
+      const probList = document.getElementById('probList');
+      probList.innerHTML = '';
+      Object.entries(data.probabilities).forEach(([label, value]) => {
+        const color = classColors[label] || '#00ff41';
+        const row = document.createElement('div');
+        row.innerHTML = `
+          <div class="flex justify-between text-xs">
+            <span>${label.toUpperCase()}</span>
+            <span style="color:${color}">${value}%</span>
+          </div>
+          <div class="h-2 bg-[#353534] mt-1">
+            <div style="width:${Math.max(0, Math.min(100, value))}%; background:${color}; height:100%"></div>
+          </div>
+        `;
+        probList.appendChild(row);
+      });
+
+      const digest = document.getElementById('digestList');
+      digest.innerHTML = '';
+      Object.entries(data.features_used).forEach(([k, v]) => {
+        const chip = document.createElement('span');
+        chip.className = 'bg-[#2a2a2a] px-2 py-1 text-[10px] border border-[#3b4b37]';
+        chip.textContent = `${k.toUpperCase()}: ${v}`;
+        digest.appendChild(chip);
+      });
+    }
+  </script>
+</body>
+</html>

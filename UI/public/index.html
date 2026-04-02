@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SEISMO_TERM_88 // TERMINAL</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Space Grotesk', sans-serif; background:#131313; color:#e5e2e1; }
+    .grid-bg { background-image: linear-gradient(rgba(0,255,65,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,65,.06) 1px, transparent 1px); background-size:40px 40px; }
+  </style>
+</head>
+<body class="grid-bg min-h-screen">
+  <header class="h-16 px-6 border-b border-[#3b4b37] flex items-center justify-between bg-[#131313] sticky top-0">
+    <div class="text-[#00ff41] font-bold tracking-[0.2em]">SEISMIC_COMMAND_V1.0</div>
+    <a href="/login" class="text-[#72ff70] text-sm">INITIALIZE_LOGIN</a>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-6 py-16">
+    <p class="text-xs tracking-[0.25em] text-[#72ff70]">SYSTEM_INITIALIZATION_READY</p>
+    <h1 class="text-6xl md:text-8xl font-black text-[#00ff41] leading-[0.85] mt-2">SEISMO<br>TERM_88</h1>
+    <p class="mt-6 max-w-2xl border-l-2 border-[#00ff41] pl-4 text-[#9fb39a]">Neural-network seismic impact console. Run class prediction with a serverless backend on Vercel.</p>
+
+    <div class="mt-8 flex flex-wrap gap-4">
+      <a href="/login" class="px-6 py-3 bg-[#00ff41] text-black font-bold tracking-widest">OPEN_SYSTEM</a>
+      <a href="/api/health" class="px-6 py-3 border border-[#3b4b37] text-[#72ff70]">API_HEALTH</a>
+    </div>
+  </main>
+</body>
+</html>
